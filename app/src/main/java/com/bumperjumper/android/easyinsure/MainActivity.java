@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                Log.d("Received Successful Respose",response.body().toString());
+                Log.d("Received Successful Res",response.body().toString());
             }
 
             @Override
