@@ -21,8 +21,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumperjumper.android.easyinsure.activity.PolicyFormActivity;
 import com.bumperjumper.android.easyinsure.interfaces.DocuApi;
 import com.bumperjumper.android.easyinsure.model.DocumentData;
+import com.bumperjumper.android.easyinsure.model.PolicyFormPojo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
@@ -31,7 +33,6 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
-import com.google.gson.JsonElement;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,9 +81,6 @@ public class MainActivity extends AppCompatActivity {
             if (permissionsToRequest.size() > 0)
                 requestPermissions((String[]) permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
         }
-
-        postDocumentData();
-
     }
 
     public void getTextImageFromBitmap(Bitmap bitmap) {
@@ -98,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(FirebaseVisionDocumentText result) {
                         mTextView.setText(result.getText());
+                        DocumentData documentData=new DocumentData();
+                        documentData.setData(result.getText());
+                        postDocumentData(documentData);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -242,20 +243,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void postDocumentData(){
+    public void postDocumentData(DocumentData documentData){
         RetrofitController controller=new RetrofitController();
         DocuApi apiService = controller.getRetrofitInstance().create(DocuApi.class);
-        DocumentData documentData=new DocumentData();
-        documentData.setData("Policy");
-        Call<JsonElement> call = apiService.postDocument(documentData);
-        call.enqueue(new Callback<JsonElement>() {
+        Call<PolicyFormPojo> call = apiService.postDocument(documentData);
+        call.enqueue(new Callback<PolicyFormPojo>() {
             @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                Log.d("Received Successful Res",response.body().toString());
+            public void onResponse(Call<PolicyFormPojo> call, Response<PolicyFormPojo> response) {
+                if(response.isSuccessful() && response!=null) {
+                    Intent intent=new Intent(MainActivity.this,PolicyFormActivity.class);
+                    intent.putExtra("RegInfo",response.body());
+                    startActivity(intent);
+                }
             }
 
             @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
+            public void onFailure(Call<PolicyFormPojo> call, Throwable t) {
                 Log.d("Received Failure",t.toString());
             }
         });

@@ -1,5 +1,6 @@
 package com.bumperjumper.android.easyinsure.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +48,10 @@ public class PolicyFormActivity extends AppCompatActivity {
         setContentView(R.layout.policy_form);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
+        Intent i = getIntent();
+        PolicyFormPojo formPojo = i.getExtras().getParcelable("RegInfo");
+
+        injectDataIntoInputFields(formPojo);
 
         minputName = findViewById(R.id.input_name);
         mSpinnerVehicleType = findViewById(R.id.spinner_vehicleType);
@@ -64,7 +69,6 @@ public class PolicyFormActivity extends AppCompatActivity {
         mInputVehicleCompany = findViewById(R.id.input_vehicleCompany);
 
         mApproveBtn = findViewById(R.id.btn_approve);
-
         mApproveBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -93,6 +97,12 @@ public class PolicyFormActivity extends AppCompatActivity {
     }
 
     private void injectDataIntoInputFields(PolicyFormPojo policyFormPojo) {
+
+        if(policyFormPojo == null) {
+            Toast.makeText(PolicyFormActivity.this, "There has been some issue!!", Toast.LENGTH_LONG).show();
+            Log.i("INJECT-DATA", "Null from previous activitiy!");
+            return;
+        }
 
         minputName.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.name));
 
