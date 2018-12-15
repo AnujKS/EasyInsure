@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "561281949023",
+    "firebase_url": "https://bumper-jumper.firebaseio.com",
+    "project_id": "bumper-jumper",
+    "storage_bucket": "bumper-jumper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561281949023:android:9b463bb269a8dfb1",
+        "android_client_info": {
+          "package_name": "com.bumperjumper.android.easyinsure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561281949023-dk1jnt1d8ir03krqml27lkrtuksirdtm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRqVBfdK3m3_AHt8e5kOpmGns4t9Dq43M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
