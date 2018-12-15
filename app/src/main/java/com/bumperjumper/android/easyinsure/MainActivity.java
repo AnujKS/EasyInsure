@@ -80,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
             if (permissionsToRequest.size() > 0)
                 requestPermissions((String[]) permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
         }
-
-        postDocumentData();
-
     }
 
     public void getTextImageFromBitmap(Bitmap bitmap) {
@@ -98,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(FirebaseVisionDocumentText result) {
                         mTextView.setText(result.getText());
+                        DocumentData documentData=new DocumentData();
+                        documentData.setData(result.getText());
+                        postDocumentData(documentData);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -242,11 +242,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void postDocumentData(){
+    public void postDocumentData(DocumentData documentData){
         RetrofitController controller=new RetrofitController();
         DocuApi apiService = controller.getRetrofitInstance().create(DocuApi.class);
-        DocumentData documentData=new DocumentData();
-        documentData.setData("Policy");
         Call<JsonElement> call = apiService.postDocument(documentData);
         call.enqueue(new Callback<JsonElement>() {
             @Override
