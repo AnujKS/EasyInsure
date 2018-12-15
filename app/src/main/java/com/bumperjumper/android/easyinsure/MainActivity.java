@@ -15,24 +15,33 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumperjumper.android.easyinsure.interfaces.DocuApi;
+import com.bumperjumper.android.easyinsure.model.DocumentData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
-import com.google.firebase.ml.vision.text.FirebaseVisionText;
-import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
+import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
+import com.google.gson.JsonElement;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.CAMERA;
 
@@ -72,28 +81,33 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions((String[]) permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
         }
 
+        postDocumentData();
+
     }
 
     public void getTextImageFromBitmap(Bitmap bitmap) {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
-        FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance()
-                .getOnDeviceTextRecognizer();
+        FirebaseVisionCloudDocumentRecognizerOptions options =
+                new FirebaseVisionCloudDocumentRecognizerOptions.Builder()
+                        .setLanguageHints(Arrays.asList("en"))
+                        .build();
+        FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options);
 
-        Task<FirebaseVisionText> result =
-                detector.processImage(image)
-                        .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                            @Override
-                            public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                                mTextView.setText(firebaseVisionText.getText());
-                            }
-                        })
-                        .addOnFailureListener(
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
+        detector.processImage(image)
+                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionDocumentText>() {
+                    @Override
+                    public void onSuccess(FirebaseVisionDocumentText result) {
+                        mTextView.setText(result.getText());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
-                                    }
-                                });
+                    }
+                });
+
+
     }
 
     public Intent getPickImageChooserIntent() {
@@ -146,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         Uri outputFileUri = null;
         File getImage = getExternalCacheDir();
         if (getImage != null) {
-            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "profile.png"));
+            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "insurance.png"));
         }
         return outputFileUri;
     }
@@ -225,5 +239,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void postDocumentData(){
+        RetrofitController controller=new RetrofitController();
+        DocuApi apiService = controller.getRetrofitInstance().create(DocuApi.class);
+        DocumentData documentData=new DocumentData();
+        documentData.setData("Policy");
+        Call<JsonElement> call = apiService.postDocument(documentData);
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                Log.d("Received Successful Respose",response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                Log.d("Received Failure",t.toString());
+            }
+        });
     }
 }
