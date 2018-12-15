@@ -1,8 +1,14 @@
 package com.bumperjumper.android.easyinsure.activity;
 
+<<<<<<< HEAD
+=======
+import android.content.Intent;
+import android.os.Build;
+>>>>>>> passed data to policy form
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,8 +41,9 @@ public class PolicyFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
 
+        Intent i = getIntent();
+        PolicyFormPojo formPojo = i.getExtras().getParcelable("RegInfo");
 
         minputName = findViewById(R.id.input_name);
         mSpinnerVehicleType = findViewById(R.id.spinner_vehicleType);
@@ -49,7 +56,6 @@ public class PolicyFormActivity extends AppCompatActivity {
         mInputVehicleCompany = findViewById(R.id.input_vehicleCompany);
 
         mApproveBtn = findViewById(R.id.btn_approve);
-
         mApproveBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
