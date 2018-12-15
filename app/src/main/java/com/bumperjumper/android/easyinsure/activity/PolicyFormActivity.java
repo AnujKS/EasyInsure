@@ -1,8 +1,6 @@
 package com.bumperjumper.android.easyinsure.activity;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,8 +10,7 @@ import android.widget.Spinner;
 
 import com.bumperjumper.android.easyinsure.R;
 import com.bumperjumper.android.easyinsure.model.PolicyFormPojo;
-
-import static android.Manifest.permission.CAMERA;
+import com.bumperjumper.android.easyinsure.utils.StringUtils;
 
 public class PolicyFormActivity extends AppCompatActivity {
 
@@ -51,7 +48,7 @@ public class PolicyFormActivity extends AppCompatActivity {
         mInputEngineNumber = findViewById(R.id.input_engineNumber);
         mInputVehicleCompany = findViewById(R.id.input_vehicleCompany);
 
-        mApproveBtn = findViewById(R.id.btn_login);
+        mApproveBtn = findViewById(R.id.btn_approve);
 
         mApproveBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -63,6 +60,21 @@ public class PolicyFormActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void injectDataIntoInputFields(PolicyFormPojo policyFormPojo) {
+
+        minputName.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.name));
+
+//        mSpinnerVehicleType.set(StringUtils.INSTANCE.getCleansedString(policyFormPojo.erVehicleType));
+
+        minputDisplacement.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.displacement));
+        mInputRegistrationNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.registrationNumber));
+        mInputPolicyDate.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.policyDate));
+        mInputPolicyExpiryDate.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.policyExpiryDate));
+        mInputChassisNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.chassisNumber));
+        mInputEngineNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.engineNumber));
+        mInputVehicleCompany.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.vehicleCompany));
     }
 
 
