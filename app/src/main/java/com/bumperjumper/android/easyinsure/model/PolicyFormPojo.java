@@ -13,6 +13,7 @@ public class PolicyFormPojo implements Parcelable {
     public String chassisNumber;
     public String engineNumber;
     public String vehicleCompany;
+    public String premium;
 
 
     @Override
@@ -31,6 +32,7 @@ public class PolicyFormPojo implements Parcelable {
         dest.writeString(this.chassisNumber);
         dest.writeString(this.engineNumber);
         dest.writeString(this.vehicleCompany);
+        dest.writeString(this.premium);
     }
 
     public PolicyFormPojo() {
@@ -46,6 +48,7 @@ public class PolicyFormPojo implements Parcelable {
         this.chassisNumber = in.readString();
         this.engineNumber = in.readString();
         this.vehicleCompany = in.readString();
+        this.premium = in.readString();
     }
 
     public static final Parcelable.Creator<PolicyFormPojo> CREATOR = new Parcelable.Creator<PolicyFormPojo>() {
