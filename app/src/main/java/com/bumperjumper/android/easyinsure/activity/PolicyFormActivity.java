@@ -1,8 +1,10 @@
 package com.bumperjumper.android.easyinsure.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.bumperjumper.android.easyinsure.interfaces.DocuApi;
 import com.bumperjumper.android.easyinsure.model.PolicyFormPojo;
 import com.bumperjumper.android.easyinsure.utils.StringUtils;
 
+import androidx.annotation.RequiresApi;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,21 +28,28 @@ import retrofit2.Response;
 
 public class PolicyFormActivity extends AppCompatActivity {
 
-    private EditText minputName;
-
     private Spinner mSpinnerVehicleType;
 
-    private EditText minputDisplacement;
-    private EditText mInputRegistrationNumber;
-    private EditText mInputPolicyDate;
-    private EditText mInputPolicyExpiryDate;
-    private EditText mInputChassisNumber;
-    private EditText mInputEngineNumber;
-    private EditText mInputVehicleCompany;
+    private EditText mName;
+    private EditText mDisplacement;
+    private EditText mRegistrationNumber;
+    private EditText mPolicyDate;
+    private EditText mPolicyExpiryDate;
+    private EditText mChassisNumber;
+    private EditText mDescription;
+    private EditText mRegistrationYear;
+    private EditText mVehicleCompany;
+    private EditText mVehicleModel;
+    private EditText mMakeDescription;
+    private EditText mModelDescription;
+    private EditText mNumberOfSeats;
+    private EditText mColour;
+    private EditText mEngineNumber;
+    private EditText mFuelType;
+    private EditText mRegistrationDate;
+    private EditText mLocation;
 
-    private Button mApproveBtn;
-
-    private PolicyFormPojo mPolicyFormPojo;
+    private CardView mApproveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,22 +61,30 @@ public class PolicyFormActivity extends AppCompatActivity {
         Intent i = getIntent();
         PolicyFormPojo formPojo = i.getExtras().getParcelable("RegInfo");
 
-        injectDataIntoInputFields(formPojo);
-
-        minputName = findViewById(R.id.input_name);
         mSpinnerVehicleType = findViewById(R.id.spinner_vehicleType);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.vehicle_arrays, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerVehicleType.setAdapter(adapter);
 
-        minputDisplacement = findViewById(R.id.input_displacement);
-        mInputRegistrationNumber = findViewById(R.id.input_registrationNumber);
-        mInputPolicyDate = findViewById(R.id.input_policyDate);
-        mInputPolicyExpiryDate = findViewById(R.id.input_policyExpiryDate);
-        mInputChassisNumber = findViewById(R.id.input_chassisNumber);
-        mInputEngineNumber = findViewById(R.id.input_engineNumber);
-        mInputVehicleCompany = findViewById(R.id.input_vehicleCompany);
+        mName = findViewById(R.id.input_name);
+        mDisplacement = findViewById(R.id.input_displacement);
+        mRegistrationNumber = findViewById(R.id.input_registrationNumber);
+        mPolicyDate = findViewById(R.id.input_policyDate);
+        mPolicyExpiryDate = findViewById(R.id.input_policyExpiryDate);
+        mChassisNumber = findViewById(R.id.input_chassisNumber);
+        mDescription = findViewById(R.id.input_description);
+        mRegistrationYear = findViewById(R.id.input_registrationYear);
+        mVehicleCompany = findViewById(R.id.input_vehicleCompany);
+        mVehicleModel = findViewById(R.id.input_vehicleModel);
+        mMakeDescription = findViewById(R.id.input_makeDescription);
+        mModelDescription = findViewById(R.id.input_modelDescription);
+        mNumberOfSeats = findViewById(R.id.input_numberOfSeats);
+        mColour = findViewById(R.id.input_colour);
+        mEngineNumber = findViewById(R.id.input_engineNumber);
+        mFuelType = findViewById(R.id.input_fuelType);
+        mRegistrationDate = findViewById(R.id.input_registrationDate);
+        mLocation = findViewById(R.id.input_location);
 
         mApproveBtn = findViewById(R.id.btn_approve);
         mApproveBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +116,8 @@ public class PolicyFormActivity extends AppCompatActivity {
             }
         });
 
+        injectDataIntoInputFields(formPojo);
+
     }
 
     private void injectDataIntoInputFields(PolicyFormPojo policyFormPojo) {
@@ -108,34 +128,55 @@ public class PolicyFormActivity extends AppCompatActivity {
             return;
         }
 
-        minputName.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.name));
-
         mSpinnerVehicleType.setSelection(((ArrayAdapter<CharSequence>)mSpinnerVehicleType.getAdapter()).getPosition(policyFormPojo.vehicleType));
 
-        minputDisplacement.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.displacement));
-        mInputRegistrationNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.registrationNumber));
-        mInputPolicyDate.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.policyDate));
-        mInputPolicyExpiryDate.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.policyExpiryDate));
-        mInputChassisNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.chassisNumber));
-        mInputEngineNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.engineNumber));
-        mInputVehicleCompany.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.vehicleCompany));
+        mName.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.name));
+        mDisplacement.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.displacement));
+        mRegistrationNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.registrationNumber));
+        mPolicyDate.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.policyDate));
+        mPolicyExpiryDate.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.policyExpiryDate));
+        mChassisNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.chassisNumber));
+        mDescription.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.description));
+        mRegistrationYear.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.registrationYear));
+        mVehicleCompany.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.vehicleCompany));
+        mVehicleModel.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.vehicleModel));
+        mMakeDescription.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.makeDescription));
+        mModelDescription.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.modelDescription));
+        mNumberOfSeats.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.numberOfSeats));
+        mColour.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.colour));
+        mEngineNumber.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.engineNumber));
+        mFuelType.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.fuelType));
+        mRegistrationDate.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.registrationDate));
+        mLocation.setText(StringUtils.INSTANCE.getCleansedString(policyFormPojo.location));
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private PolicyFormPojo getPolicyFormFromUI() {
-        PolicyFormPojo policyFormPojo = new PolicyFormPojo();
 
-        policyFormPojo.name = minputName.getText().toString();
+        PolicyFormPojo policyFormPojo = new PolicyFormPojo();
 
         policyFormPojo.vehicleType = mSpinnerVehicleType.getSelectedItem().toString();
 
-        policyFormPojo.displacement = minputDisplacement.getText().toString();
-        policyFormPojo.registrationNumber = mInputRegistrationNumber.getText().toString();
-        policyFormPojo.policyDate = mInputPolicyDate.getText().toString();
-        policyFormPojo.policyExpiryDate = mInputPolicyExpiryDate.getText().toString();
-        policyFormPojo.chassisNumber = mInputChassisNumber.getText().toString();
-        policyFormPojo.engineNumber = mInputEngineNumber.getText().toString();
-        policyFormPojo.vehicleCompany = mInputVehicleCompany.getText().toString();
+
+        policyFormPojo.name = mName.getText().toString();
+        policyFormPojo.displacement = mDisplacement.getText().toString();
+        policyFormPojo.registrationNumber = mRegistrationNumber.getText().toString();
+        policyFormPojo.policyDate = mPolicyDate.getText().toString();
+        policyFormPojo.policyExpiryDate = mPolicyExpiryDate.getText().toString();
+        policyFormPojo.chassisNumber = mChassisNumber.getText().toString();
+        policyFormPojo.description = mDescription.getText().toString();
+        policyFormPojo.registrationYear = mRegistrationYear.getText().toString();
+        policyFormPojo.vehicleCompany = mVehicleCompany.getText().toString();
+        policyFormPojo.vehicleModel = mVehicleModel.getText().toString();
+        policyFormPojo.makeDescription = mMakeDescription.getText().toString();
+        policyFormPojo.modelDescription = mModelDescription.getText().toString();
+        policyFormPojo.numberOfSeats = mNumberOfSeats.getText().toString();
+        policyFormPojo.colour = mColour.getText().toString();
+        policyFormPojo.engineNumber = mEngineNumber.getText().toString();
+        policyFormPojo.fuelType = mFuelType.getText().toString();
+        policyFormPojo.registrationDate = mRegistrationDate.getText().toString();
+        policyFormPojo.location = mLocation.getText().toString();
 
         return policyFormPojo;
     }
