@@ -18,5 +18,18 @@
     </string-array>
 
     <string name="Rs">\u20B9</string>
+    <string name="input_chassisNumber">Chassis Number</string>
+    <string name="input_description">Description</string>
+    <string name="input_registrationYear">Registration Year</string>
+    <string name="input_vehicleCompany">Company</string>
+    <string name="input_vehicleModel">Vehicle Model</string>
+    <string name="input_makeDescription">Make Description</string>
+    <string name="input_modelDescription">Model Description</string>
+    <string name="input_numberOfSeats">Seats</string>
+    <string name="input_colour">Color</string>
+    <string name="input_engineNumber">Engine Number</string>
+    <string name="input_fuelType">Fuel Type</string>
+    <string name="input_registrationDate">Registration Date</string>
+    <string name="input_location">Location</string>
 
 </resources>
