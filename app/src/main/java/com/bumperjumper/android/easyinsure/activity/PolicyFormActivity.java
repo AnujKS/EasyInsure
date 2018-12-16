@@ -3,6 +3,7 @@ package com.bumperjumper.android.easyinsure.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -37,9 +38,7 @@ public class PolicyFormActivity extends AppCompatActivity {
     private EditText mInputEngineNumber;
     private EditText mInputVehicleCompany;
 
-    private Button mApproveBtn;
-
-    private PolicyFormPojo mPolicyFormPojo;
+    private CardView mApproveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +49,6 @@ public class PolicyFormActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         PolicyFormPojo formPojo = i.getExtras().getParcelable("RegInfo");
-
-        injectDataIntoInputFields(formPojo);
 
         minputName = findViewById(R.id.input_name);
         mSpinnerVehicleType = findViewById(R.id.spinner_vehicleType);
@@ -93,6 +90,8 @@ public class PolicyFormActivity extends AppCompatActivity {
                 });*/
             }
         });
+
+        injectDataIntoInputFields(formPojo);
 
     }
 

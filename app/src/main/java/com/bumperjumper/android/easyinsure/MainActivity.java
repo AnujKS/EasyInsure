@@ -12,8 +12,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -64,9 +64,16 @@ public class MainActivity extends AppCompatActivity {
         mTextView = findViewById(R.id.text);
         setSupportActionBar(toolbar);
 
+        CardView uploadPicture=findViewById(R.id.take_picture);
+        uploadPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(getPickImageChooserIntent(), 200);
+            }
+        });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        CardView takePicture=findViewById(R.id.upload_picture);
+        takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivityForResult(getPickImageChooserIntent(), 200);
@@ -180,8 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-
             }
         }
     }
