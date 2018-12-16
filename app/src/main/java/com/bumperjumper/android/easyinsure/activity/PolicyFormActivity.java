@@ -79,6 +79,10 @@ public class PolicyFormActivity extends AppCompatActivity {
 
                 Toast.makeText(PolicyFormActivity.this, "Please make the premium payment!", Toast.LENGTH_LONG).show();
 
+                Intent intent=new Intent(PolicyFormActivity.this,PaymentsActivity.class);
+                intent.putExtra("premium", policyFormPojo.premium != null ? policyFormPojo.premium : "2000");
+                startActivity(intent);
+
                 /*approve(policyFormPojo, new ApproveCallback() {
                     @Override
                     public void onComplete(Response<ResponseBody> response, Throwable t) {
