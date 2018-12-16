@@ -89,6 +89,7 @@ public class PolicyFormActivity extends AppCompatActivity {
         mApproveBtn = findViewById(R.id.btn_approve);
         mApproveBtn.setOnClickListener(new View.OnClickListener() {
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 //TODO
